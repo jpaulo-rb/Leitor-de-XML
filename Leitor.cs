@@ -24,8 +24,8 @@ namespace Leitor_de_XML {
                 CriarGrid(campos);
 
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message);
-                Debug.WriteLine("Exception ao tentar recuperar XML" + ex);
+                MessageBox.Show(ex.Message, "Erro ao ler ou processar XML", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Debug.WriteLine("Exception XML" + ex);
             }
         }
 

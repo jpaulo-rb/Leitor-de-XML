@@ -22,34 +22,40 @@ namespace Leitor_de_XML.Infrastructure {
                     g => g.Select(c => c.TagFilho).ToHashSet()
                 );
 
-            while (reader.Read()) {
-                if (reader.NodeType != XmlNodeType.Element) continue;
+            var ultimaTag = string.Empty;
 
-                if (camposComPai.TryGetValue(reader.LocalName, out var camposFilhos)) {
-                    using var subtree = reader.ReadSubtree();
-                    var tagPai = reader.LocalName;
-                    var valores = string.Empty;
+            try {
+                while (reader.Read()) {
 
-                    while (subtree.Read()) {
-                        if (subtree.NodeType != XmlNodeType.Element) continue;
+                    if (reader.NodeType != XmlNodeType.Element) continue;
+                    ultimaTag = reader.Name;
 
-                        if (camposFilhos.Contains(subtree.LocalName)) {
-                            valores += reader.ReadString();
-                            continue;
+                    if (camposComPai.TryGetValue(reader.LocalName, out var camposFilhos)) {
+                        using var subtree = reader.ReadSubtree();
+                        var tagPai = reader.LocalName;
+                        var valores = string.Empty;
+
+                        while (subtree.Read()) {
+                            if (subtree.NodeType != XmlNodeType.Element) continue;
+
+                            if (camposFilhos.Contains(subtree.LocalName)) {
+                                valores = valores + " " + subtree.ReadString();
+                                continue;
+                            }
                         }
+
+                        camposXml.Add(($"{tagPai}", valores));
                     }
 
-                    camposXml.Add(($"{tagPai}", valores));
+                    if (camposSemPai.Contains(reader.Name)) {
+                        camposXml.Add(
+                            ($"{reader.Name}", reader.ReadString()));
+                        continue;
+                    }
                 }
-
-                if (camposSemPai.Contains(reader.Name)) {
-                    camposXml.Add(
-                        ($"{reader.Name}", reader.ReadString()));
-                    continue;
-                }
+            } catch (XmlException ex) {
+                throw new XmlException($"- Tag malformada: <{ultimaTag}>", ex);
             }
-
-
 
             return camposXml;
         }

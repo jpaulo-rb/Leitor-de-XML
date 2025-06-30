@@ -1,4 +1,5 @@
-﻿using Leitor_de_XML.Infrastructure;
+﻿using System.Xml;
+using Leitor_de_XML.Infrastructure;
 
 namespace Leitor_de_XML.Services {
     public static class DocService {
@@ -9,7 +10,11 @@ namespace Leitor_de_XML.Services {
 
             foreach (var xmlPath in xmlPaths) {
                 using Stream stream = File.OpenRead(xmlPath);
-                itens.UnionWith(DocReader.RecuperarCamposXml(stream, camposXml));
+                try {
+                    itens.UnionWith(DocReader.RecuperarCamposXml(stream, camposXml));
+                } catch (XmlException ex) {
+                    throw new XmlException($"- Erro ao ler o arquivo: {xmlPath}\n{ex.Message}", ex);
+                }
             }
 
             return itens;
