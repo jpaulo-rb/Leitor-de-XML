@@ -7,7 +7,13 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>xml.ico</ApplicationIcon>
+    <StartupObject>Leitor_de_XML.Program</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="xml.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="Infrastructure\DocReader.cs" />

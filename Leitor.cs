@@ -15,6 +15,7 @@ namespace Leitor_de_XML {
                     camposXml: [
                         ("", "CFOP"),
                         ("ICMS", "CST"),
+                        ("ICMS", "CSOSN"),
                         ("ICMS", "orig"),
                         ("IPI", "CST"),
                         ("PIS", "CST"),
@@ -30,6 +31,9 @@ namespace Leitor_de_XML {
         }
 
         private void CriarGrid(HashSet<(string colunas, string itens)> campos) {
+
+            docGrid.Rows.Clear();
+            docGrid.Columns.Clear();
 
             var colunas = campos.Select(c => c.colunas).Distinct().ToList();
 

@@ -11,6 +11,7 @@ namespace Leitor_de_XML.Services {
             foreach (var xmlPath in xmlPaths) {
                 using Stream stream = File.OpenRead(xmlPath);
                 try {
+                    var campos = DocReader.RecuperarCamposXml(stream, camposXml);
                     itens.UnionWith(DocReader.RecuperarCamposXml(stream, camposXml));
                 } catch (XmlException ex) {
                     throw new XmlException($"- Erro ao ler o arquivo: {xmlPath}\n{ex.Message}", ex);

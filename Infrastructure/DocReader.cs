@@ -38,6 +38,13 @@ namespace Leitor_de_XML.Infrastructure {
                         while (subtree.Read()) {
                             if (subtree.NodeType != XmlNodeType.Element) continue;
 
+                            /*
+                            if (camposFilhos.Contains(subtree.LocalName)) {
+                                camposXml.Add(($"{tagPai}-{subtree.Name}", subtree.ReadString()));
+                            }
+                        }
+                            */
+
                             if (camposFilhos.Contains(subtree.LocalName)) {
                                 valores = valores + " " + subtree.ReadString();
                                 continue;
