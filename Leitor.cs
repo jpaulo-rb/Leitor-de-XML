@@ -1,16 +1,25 @@
-using System.Diagnostics;
 using Leitor_de_XML.Services;
 using Leitor_de_XML.Utils;
+using System.Diagnostics;
 
-namespace Leitor_de_XML {
-    public partial class Leitor : Form {
-        public Leitor() {
+namespace Leitor_de_XML
+{
+    public partial class Leitor : Form
+    {
+        public Leitor()
+        {
             InitializeComponent();
         }
 
-        private void buscarXmlBtn_Click(object sender, EventArgs e) {
-            try {
+        private void buscarXmlBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
                 var xmlPaths = DialogUtils.BuscarArquivos(filtros: [DialogUtils.FiltroArquivo.XML]);
+
+                if (xmlPaths.Length == 0)
+                    return;
+
                 var campos = DocService.ExtrairCamposXml(xmlPaths,
                     camposXml: [
                         ("", "CFOP"),
@@ -24,20 +33,24 @@ namespace Leitor_de_XML {
 
                 CriarGrid(campos);
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message, "Erro ao ler ou processar XML", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Debug.WriteLine("Exception XML" + ex);
             }
         }
 
-        private void CriarGrid(HashSet<(string colunas, string itens)> campos) {
+        private void CriarGrid(HashSet<(string colunas, string itens)> campos)
+        {
 
             docGrid.Rows.Clear();
             docGrid.Columns.Clear();
 
             var colunas = campos.Select(c => c.colunas).Distinct().ToList();
 
-            foreach (var coluna in colunas) {
+            foreach (var coluna in colunas)
+            {
                 docGrid.Columns.Add(
                     coluna.ToUpper(),
                     char.ToUpperInvariant(coluna[0]) + coluna.Substring(1).ToLower()
@@ -47,9 +60,11 @@ namespace Leitor_de_XML {
             campos = campos.OrderBy(c => c.itens).ToHashSet();
             var maxLinhas = campos.GroupBy(c => c.colunas).Select(c => c.Count()).Max();
 
-            for (var i = 0; i < maxLinhas; i++) {
+            for (var i = 0; i < maxLinhas; i++)
+            {
                 var row = docGrid.Rows.Add();
-                foreach (var coluna in colunas) {
+                foreach (var coluna in colunas)
+                {
 
                     var valor = campos
                         .Where(c => c.colunas == coluna)

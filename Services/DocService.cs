@@ -1,19 +1,26 @@
-﻿using System.Xml;
-using Leitor_de_XML.Infrastructure;
+﻿using Leitor_de_XML.Infrastructure;
+using System.Xml;
 
-namespace Leitor_de_XML.Services {
-    public static class DocService {
+namespace Leitor_de_XML.Services
+{
+    public static class DocService
+    {
 
-        public static HashSet<(string tag, string valor)> ExtrairCamposXml(string[] xmlPaths, HashSet<(string, string)> camposXml) {
+        public static HashSet<(string tag, string valor)> ExtrairCamposXml(string[] xmlPaths, HashSet<(string, string)> camposXml)
+        {
 
             HashSet<(string, string)> itens = [];
 
-            foreach (var xmlPath in xmlPaths) {
+            foreach (var xmlPath in xmlPaths)
+            {
                 using Stream stream = File.OpenRead(xmlPath);
-                try {
+                try
+                {
                     var campos = DocReader.RecuperarCamposXml(stream, camposXml);
-                    itens.UnionWith(DocReader.RecuperarCamposXml(stream, camposXml));
-                } catch (XmlException ex) {
+                    itens.UnionWith(campos);
+                }
+                catch (XmlException ex)
+                {
                     throw new XmlException($"- Erro ao ler o arquivo: {xmlPath}\n{ex.Message}", ex);
                 }
             }
